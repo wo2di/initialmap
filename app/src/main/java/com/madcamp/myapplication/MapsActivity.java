@@ -175,8 +175,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(aeundong).title("어은동 한빛교회"));
         mMap.addMarker(new MarkerOptions().position(kaistdorm).title("기숙사"));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kaistN1, 15));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kaistN1, 15));
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                getDeviceLocation();
+                return true;
+            }
+        });
 
         getLocationPermission();
         // Turn on the My Location layer and the related control on the map.
