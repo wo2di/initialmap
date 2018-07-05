@@ -1,4 +1,5 @@
 package com.madcamp.myapplication;
+
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -35,33 +36,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.lang.Math;
 
 
-//public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-//    }
-//
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney, Australia, and move the camera.
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//        // Prompt the user for permission.
-//
-//    }
-//
-//}
-
-
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -81,8 +55,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastKnownLocation;
 
     private Button btnFindPath;
-    private TextView time;
+    private TextView tm;
     private TextView distance;
+
     LatLng kaistN1 = new LatLng(36.374438, 127.365583);
     LatLng northRes = new LatLng(36.373669, 127.359132);
     LatLng westRes = new LatLng(36.366932, 127.360485);
@@ -111,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
 
         distance = (TextView) findViewById(R.id.tvDistance);
-
+        tm = (TextView) findViewById(R.id.tvDuration);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,55 +94,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getMenuInflater().inflate(R.menu.menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item){
-                        switch (item.getItemId()){
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
                             case R.id.m1:
                                 Toast.makeText(getApplicationContext(), "KAIST N1", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.374438, 127.365583));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.374438, 127.365583) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.374438, 127.365583)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kaistN1, 15));
 
                                 break;
                             case R.id.m2:
                                 Toast.makeText(getApplicationContext(), "북측식당", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.373669, 127.359132));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.373669, 127.359132) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.373669, 127.359132)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(northRes, 15));
 
                                 break;
                             case R.id.m3:
                                 Toast.makeText(getApplicationContext(), "서측식당", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.366932, 127.360485));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.366932, 127.360485) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.366932, 127.360485)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(westRes, 15));
 
                                 break;
                             case R.id.m4:
                                 Toast.makeText(getApplicationContext(), "동측식당", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.369180, 127.363580));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.369180, 127.363580) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.369180, 127.363580)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eastRes, 15));
 
                                 break;
                             case R.id.m5:
                                 Toast.makeText(getApplicationContext(), "둔산동 롯데시네마", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.361910, 127.379042));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.361910, 127.379042) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.361910, 127.379042)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lotte, 15));
 
                                 break;
                             case R.id.m6:
                                 Toast.makeText(getApplicationContext(), "궁동 로데오거리", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.362309, 127.351120));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.362309, 127.351120) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.362309, 127.351120)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gungdong, 15));
 
                                 break;
                             case R.id.m7:
                                 Toast.makeText(getApplicationContext(), "어은동 한빛교회", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.364016, 127.358699));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.364016, 127.358699) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.364016, 127.358699)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(aeundong, 15));
 
                                 break;
                             case R.id.m8:
                                 Toast.makeText(getApplicationContext(), "기숙사", Toast.LENGTH_SHORT).show();
-                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.373604, 127.357537));
+                                distance.setText(distanceLatLong2(yourlat, yourlng, 36.373604, 127.357537) + " m");
+                                tm.setText(calTime(distanceLatLong2(yourlat, yourlng, 36.373604, 127.357537)) + " min");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kaistdorm, 15));
-
                                 break;
                             default:
                                 break;
@@ -175,7 +157,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         return false;
                     }
                 });
-                popup.show();;
+                popup.show();
+                ;
             }
         });
     }
@@ -204,24 +187,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public static String distanceLatLong2(double lat1, double lng1, double lat2, double lng2)
-    {
+    public static String distanceLatLong2(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 6371.0d; // KM: use mile here if you want mile result
 
         double dLat = toRadian(lat2 - lat1);
         double dLng = toRadian(lng2 - lng1);
 
-        double a = Math.pow(Math.sin(dLat/2), 2)  +
+        double a = Math.pow(Math.sin(dLat / 2), 2) +
                 Math.cos(toRadian(lat1)) * Math.cos(toRadian(lat2)) *
-                        Math.pow(Math.sin(dLng/2), 2);
+                        Math.pow(Math.sin(dLng / 2), 2);
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return Double.toString(Math.round(earthRadius * c * 1000d)/1000d * 1000) + " m"; // returns result kilometers
+        return Double.toString(Math.round(earthRadius * c * 1000d) / 1000d * 1000); // returns result kilometers
     }
 
-    public static double toRadian(double degrees)
-    {
+    public static String calTime(String distance) {
+        double dist = Double.parseDouble(distance);
+        double time = dist / 80;
+        return Double.toString(Math.round(time*10d)/10d);
+    }
+
+
+    public static double toRadian(double degrees) {
         return (degrees * Math.PI) / 180.0d;
     }
 
@@ -262,7 +250,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             yourlat = mLastKnownLocation.getLatitude();
                             yourlng = mLastKnownLocation.getLongitude();
-                                                    } else {
+                        } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
                             mMap.moveCamera(CameraUpdateFactory
@@ -272,11 +260,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
-
-
     }
 
     private void updateLocationUI() {
@@ -293,7 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mLastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
